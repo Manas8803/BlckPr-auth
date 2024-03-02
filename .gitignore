@@ -21,7 +21,6 @@ cdk.out
 # Other files
 /node_modules/
 .env
-/app/env
 .DS_Store
-deploy/main.zip
-deploy/email-service.zip
+deploy-scripts/auth-service.zip
+deploy-scripts/email-service.zip
