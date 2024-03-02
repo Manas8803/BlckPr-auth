@@ -1,3 +1,3 @@
-module authTest-cdk-deploy
+module BlckPr-auth
 
 go 1.21.3

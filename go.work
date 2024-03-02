@@ -2,6 +2,6 @@ go 1.21.3
 
 use ./auth-service
 
-use ./deploy
+use ./deploy-scripts
 
 use ./email-service

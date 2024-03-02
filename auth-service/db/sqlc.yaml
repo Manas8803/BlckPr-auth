@@ -1,0 +1,12 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "query.sql"
+    schema: "schema.sql"
+    database:
+      managed: true
+      uri: "postgres://raagpcqx:IB8crmVV5fNf6JFetbhYqRYj_F6WaNVO@isabelle.db.elephantsql.com/raagpcqx"
+    gen:
+      go:
+        package: "db"
+        out: "sqlconfig"
