@@ -27,7 +27,7 @@ var validate = validator.New()
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			Body	body		model.Login					true	"User's email and password"
+//	@Param			Body	body		model.Login					true	"User's email , password and role"
 //	@Success		200		{object}	responses.UserResponse_doc	"Successful response"
 //	@Failure		400		{object}	responses.ErrorResponse_doc	"Invalid JSON data"
 //	@Failure		400		{object}	responses.ErrorResponse_doc	"Please provide the required credentials"
@@ -103,7 +103,7 @@ func Login(r *gin.Context) {
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			user	body		model.Register				true	"User name, email, password"
+//	@Param			user	body		model.Register				true	"User email, password and role"
 //	@Success		201		{object}	responses.UserResponse_doc	"Successful response"
 //	@Failure		400		{object}	responses.ErrorResponse_doc	"Invalid JSON data, Invalid Email"
 //	@Failure		401		{object}	responses.ErrorResponse_doc	"Invalid Credentials"
@@ -189,7 +189,7 @@ func Register(r *gin.Context) {
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			Body	body		model.OTP					true	"User's email address and otp"
+//	@Param			Body	body		model.OTP					true	"User's email and otp"
 //	@Success		200		{object}	responses.UserResponse_doc	"Email is already verified. Please login."
 //	@Failure		400		{object}	responses.ErrorResponse_doc	"Invalid JSON data, Invalid Email"
 //	@Failure		404		{object}	responses.ErrorResponse_doc	"Email is not registered. Please register to continue"
