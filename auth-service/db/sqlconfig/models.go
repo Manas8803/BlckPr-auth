@@ -8,9 +8,9 @@ import ()
 
 type User struct {
 	ID         int64
-	Name       string
 	Email      string
 	Password   string
 	Isverified bool
+	Role       string
 	Otp        string
 }

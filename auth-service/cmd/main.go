@@ -1,10 +1,10 @@
 package main
 
 import (
-	"auth-service/configs"
-	controller "auth-service/controllers"
-	docs "auth-service/docs"
-	"auth-service/routes"
+	"auth-service/lib/configs"
+	controller "auth-service/main-app/controllers"
+	docs "auth-service/main-app/docs"
+	"auth-service/main-app/routes"
 	"context"
 	"os"
 
@@ -17,11 +17,11 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-//	@title			Registration API
+//	@title			Auth API
 //	@version		1.0
-//	@description	This is a registration api for an application.
+//	@description	This is an auth api for an application.
 
-// @BasePath	/api/
+// @BasePath	/api/v1
 var ginLambda *ginadapter.GinLambda
 
 func init() {
@@ -42,7 +42,6 @@ func init() {
 	configs.ConnectDB()
 	router.GET("/", controller.BaseRoute)
 	router.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	// router.Run(":8000")
 	ginLambda = ginadapter.New(router)
 }
 

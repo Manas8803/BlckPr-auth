@@ -24,7 +24,7 @@ func LamdaStack(scope constructs.Construct, id string, props *AuthTestProps) aws
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
-	sendEmail_handler := awslambda.NewFunction(stack, jsii.String("SendEmail"), &awslambda.FunctionProps{
+	sendEmail_handler := awslambda.NewFunction(stack, jsii.String("email-service"), &awslambda.FunctionProps{
 		Code:    awslambda.Code_FromAsset(jsii.String("email-service.zip"), nil),
 		Runtime: awslambda.Runtime_GO_1_X(),
 		Handler: jsii.String("/email-service/build/main"),

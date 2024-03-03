@@ -8,6 +8,6 @@ SET isverified = TRUE
 WHERE email = $1;
 
 -- name: CreateUser :one
-INSERT INTO users (name, email, password, isverified, otp)
+INSERT INTO users ( email, password, role, isverified, otp)
 VALUES ($1, $2, $3, false, $4)
 RETURNING *;
