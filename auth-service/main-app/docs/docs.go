@@ -47,19 +47,19 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Please provide with sufficient credentials",
+                        "description": "Please provide the required credentials",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponse_doc"
                         }
                     },
                     "401": {
-                        "description": "Invalid Credentials",
+                        "description": "Invalid Credentials : Password does not match",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponse_doc"
                         }
                     },
                     "404": {
-                        "description": "User is not registered",
+                        "description": "Email is not registered with the specified role. Registered Role : \u003crole\u003e",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponse_doc"
                         }
@@ -105,7 +105,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful response, User already verified. Please login.",
+                        "description": "Email is already verified. Please login.",
                         "schema": {
                             "$ref": "#/definitions/responses.UserResponse_doc"
                         }
@@ -123,13 +123,13 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "User does not exist. Please register to generate OTP.",
+                        "description": "Email is not registered. Please register to continue",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponse_doc"
                         }
                     },
                     "422": {
-                        "description": "Please provide with sufficient credentials",
+                        "description": "Please provide the required credentials",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponse_doc"
                         }
@@ -187,13 +187,13 @@ const docTemplate = `{
                         }
                     },
                     "409": {
-                        "description": "User already exists",
+                        "description": "Email is already registered. Please login",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponse_doc"
                         }
                     },
                     "422": {
-                        "description": "Please provide with sufficient credentials",
+                        "description": "Please provide the required credentials",
                         "schema": {
                             "$ref": "#/definitions/responses.ErrorResponse_doc"
                         }
@@ -297,7 +297,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/api/",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Auth API",
 	Description:      "This is an auth api for an application.",

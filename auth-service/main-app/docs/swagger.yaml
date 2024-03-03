@@ -1,4 +1,4 @@
-basePath: /api/
+basePath: /api/v1
 definitions:
   models.Login:
     properties:
@@ -81,15 +81,16 @@ paths:
           schema:
             $ref: '#/definitions/responses.UserResponse_doc'
         "400":
-          description: Please provide with sufficient credentials
+          description: Please provide the required credentials
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "401":
-          description: Invalid Credentials
+          description: 'Invalid Credentials : Password does not match'
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "404":
-          description: User is not registered
+          description: 'Email is not registered with the specified role. Registered
+            Role : <role>'
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "422":
@@ -119,7 +120,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Successful response, User already verified. Please login.
+          description: Email is already verified. Please login.
           schema:
             $ref: '#/definitions/responses.UserResponse_doc'
         "400":
@@ -131,11 +132,11 @@ paths:
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "404":
-          description: User does not exist. Please register to generate OTP.
+          description: Email is not registered. Please register to continue
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "422":
-          description: Please provide with sufficient credentials
+          description: Please provide the required credentials
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "500":
@@ -173,11 +174,11 @@ paths:
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "409":
-          description: User already exists
+          description: Email is already registered. Please login
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "422":
-          description: Please provide with sufficient credentials
+          description: Please provide the required credentials
           schema:
             $ref: '#/definitions/responses.ErrorResponse_doc'
         "500":
