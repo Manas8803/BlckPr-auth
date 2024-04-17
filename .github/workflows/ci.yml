@@ -33,6 +33,17 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
+    env:
+      SQLURI: ${{ secrets.SQLURI }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      JWT_LIFETIME: ${{ secrets.JWT_LIFETIME }}
+      EMAIL: ${{ secrets.EMAIL }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      ADMIN: ${{ secrets.ADMIN }}
+      SEND_TO_EMAIL_ARN: ${{ secrets.SEND_TO_EMAIL_ARN }}
+      CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
     
     steps:
     - uses: actions/checkout@v3
