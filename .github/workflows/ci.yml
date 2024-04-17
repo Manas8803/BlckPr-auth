@@ -5,12 +5,11 @@ name: BlckPr-auth pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   clean:
     runs-on: ubuntu-latest
     steps:
@@ -26,39 +25,39 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21.3'
+          go-version: "1.21.3"
       - name: Build
         run: make build
-        
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1 
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-south-1
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-        
-    - name: Install AWS CDK
-      run: |
-        npm install -g aws-cdk
-        
-    # - name: CDK Synth
-    #   run: cdk synth
-        
-    # - name: CDK Bootstrap
-    #   run: cdk bootstrap
-        
-    - name: CDK Deploy
-      run: make deploy
 
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install AWS CDK
+        run: |
+          npm install -g aws-cdk
+
+      # - name: CDK Synth
+      #   run: cdk synth
+
+      # - name: CDK Bootstrap
+      #   run: cdk bootstrap
+
+      - name: CDK Deploy
+        workdir: deploy-scripts
+        run: cdk deploy
