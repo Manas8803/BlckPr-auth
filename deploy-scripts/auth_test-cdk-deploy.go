@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/Manas8803/authTest-cdk-deploy/deploy/roles"
