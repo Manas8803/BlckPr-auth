@@ -76,10 +76,10 @@ func main() {
 }
 
 func env() *awscdk.Environment {
-	err := godotenv.Load("../.env")
-	if err != nil {
-		log.Fatalln("Error loading .env file : ", err)
-	}
+	// err := godotenv.Load("../.env")
+	// if err != nil {
+	// 	log.Fatalln("Error loading .env file : ", err)
+	// }
 
 	return &awscdk.Environment{
 		Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
