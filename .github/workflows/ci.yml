@@ -71,4 +71,6 @@ jobs:
           name: email-service
           path: ./email-service
       - name: CDK Deploy
-        run: make deploy
+        working-directory: deploy-scripts
+        run: cdk deploy
+        
