@@ -23,9 +23,9 @@ func LamdaStack(scope constructs.Construct, id string, props *AuthTestProps) aws
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
 	sendEmail_handler := awslambda.NewFunction(stack, jsii.String("email-service"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("email-service.zip"), nil),
-		Runtime: awslambda.Runtime_GO_1_X(),
-		Handler: jsii.String("/email-service/build/main"),
+		Code:    awslambda.Code_FromAsset(jsii.String("../email-service"), nil),
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
 			"EMAIL":    jsii.String(os.Getenv("EMAIL")),
@@ -36,9 +36,9 @@ func LamdaStack(scope constructs.Construct, id string, props *AuthTestProps) aws
 	invoke_role := roles.CreateInvocationRole(stack, sendEmail_handler)
 
 	auth_handler := awslambda.NewFunction(stack, jsii.String("auth-service"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("auth-service.zip"), nil),
-		Runtime: awslambda.Runtime_GO_1_X(),
-		Handler: jsii.String("/auth-service/build/main"),
+		Code:    awslambda.Code_FromAsset(jsii.String("../auth-service"), nil),
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Role:    invoke_role,
 		Environment: &map[string]*string{

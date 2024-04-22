@@ -55,7 +55,7 @@ func BaseRoute(c *gin.Context) {
 		</head>
 		<body >
 			<div class="container" style="width:20rem;">
-				<h3 style="font-family:monospace;font-size:2rem;">Registration API</h3>
+				<h3 style="font-family:monospace;font-size:2rem;">Auth API</h3>
 				<a href="api/v1/docs/index.html#/example" style="font-family:Arial;font-size:1rem;letter-spacing:2px;">Documentation</a>
 			</div>
 		</body>

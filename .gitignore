@@ -26,3 +26,5 @@ deploy-scripts/auth-service.zip
 deploy-scripts/email-service.zip
 auth-service/build
 email-service/build
+email-service/bootstrap
+auth-service/bootstrap
