@@ -12,6 +12,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -270,7 +271,19 @@ func ValidateOTP(r *gin.Context) {
 		network.RespondWithError(r, http.StatusInternalServerError, "Unable to generate Wallet")
 		return
 	}
-	log.Println(res.Body)
+	var res_suc SuccessResponse
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println("Error reading response body:", err)
+		return
+	}
+	err = json.Unmarshal(body, &res_suc)
+	if err != nil {
+		log.Println("Error unmarshaling response body:", err)
+		return
+	}
+
+	log.Println(res_suc)
 
 	//* Generating Token
 	token, tokenErr := security.GenerateJWT()
@@ -280,4 +293,9 @@ func ValidateOTP(r *gin.Context) {
 	}
 
 	r.JSON(http.StatusOK, responses.UserResponse{Message: "success", Data: map[string]interface{}{"token": "Bearer " + token}})
+}
+
+type SuccessResponse struct {
+	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
 }
