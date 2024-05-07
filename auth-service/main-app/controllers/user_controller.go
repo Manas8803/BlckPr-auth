@@ -38,6 +38,8 @@ var validate = validator.New()
 //	@Failure		500		{object}	responses.ErrorResponse_doc	"Internal server error"
 //	@Router			/auth/login [post]
 func Login(r *gin.Context) {
+	r.Writer.Header().Set("Access-Control-Allow-Headers", "*")
+	r.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	var req model.Login
@@ -112,6 +114,8 @@ func Login(r *gin.Context) {
 //	@Failure		500		{object}	responses.ErrorResponse_doc	"Internal Server Error, Error in inserting the document"
 //	@Router			/auth/register [post]
 func Register(r *gin.Context) {
+	r.Writer.Header().Set("Access-Control-Allow-Headers", "*")
+	r.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	var user model.User_Model
 	defer cancel()
@@ -198,6 +202,8 @@ func Register(r *gin.Context) {
 //	@Failure		500		{object}	responses.ErrorResponse_doc	"Internal Server Error"
 //	@Router			/auth/otp [post]
 func ValidateOTP(r *gin.Context) {
+	r.Writer.Header().Set("Access-Control-Allow-Headers", "*")
+	r.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	ctx := context.Background()
 	var req model.OTP
 	//* Checking for invalid json format
