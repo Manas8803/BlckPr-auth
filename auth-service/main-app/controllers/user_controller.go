@@ -178,10 +178,10 @@ func Register(r *gin.Context) {
 	}
 
 	//* Sending OTP
-	if sendEmailErr := network.SendOTP(user.Email, otp); sendEmailErr != nil {
-		network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+sendEmailErr.Error())
-		return
-	}
+	// if sendEmailErr := network.SendOTP(user.Email, otp); sendEmailErr != nil {
+	// 	network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+sendEmailErr.Error())
+	// 	return
+	// }
 
 	r.JSON(http.StatusCreated, responses.UserResponse{Message: "OTP has been sent to your email"})
 }
