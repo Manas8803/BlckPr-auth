@@ -8,9 +8,13 @@ import (
 	"auth-service/lib/utils"
 	model "auth-service/main-app/models"
 	"auth-service/main-app/responses"
+	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -19,6 +23,10 @@ import (
 )
 
 var validate = validator.New()
+
+type DIDRequestBody struct {
+	Email string `json:"email"`
+}
 
 // ^ Login :
 //
@@ -243,6 +251,22 @@ func ValidateOTP(r *gin.Context) {
 	updateUserErr := queries.UpdateUser(ctx, req.Email)
 	if updateUserErr != nil {
 		network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+updateUserErr.Error())
+		return
+	}
+
+	//* Creating Wallet
+	requestBody := DIDRequestBody{
+		Email: user.Email,
+	}
+	jsonBody, err := json.Marshal(requestBody)
+	if err != nil {
+		fmt.Println("Error marshaling request body:", err)
+		return
+	}
+	_, didErr := http.Post(os.Getenv("WALLET_URL"), "application/json", bytes.NewBuffer(jsonBody))
+	if didErr != nil {
+		log.Println(didErr)
+		network.RespondWithError(r, http.StatusInternalServerError, "Unable to generate Wallet")
 		return
 	}
 

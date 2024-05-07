@@ -48,11 +48,12 @@ func LamdaStack(scope constructs.Construct, id string, props *AuthTestProps) aws
 			"EMAIL":             jsii.String(os.Getenv("EMAIL")),
 			"PASSWORD":          jsii.String(os.Getenv("PASSWORD")),
 			"ADMIN":             jsii.String(os.Getenv("ADMIN")),
+			"WALLET_URL":        jsii.String(os.Getenv("WALLET_URL")),
 			"SEND_TO_EMAIL_ARN": jsii.String(*sendEmail_handler.FunctionArn()),
 		},
 	})
 
-	awsapigateway.NewLambdaRestApi(stack, jsii.String("BlckPr-auth"), &awsapigateway.LambdaRestApiProps{
+	awsapigateway.NewLambdaRestApi(stack, jsii.String("BlckPr-auth-1"), &awsapigateway.LambdaRestApiProps{
 		Handler: auth_handler,
 		DefaultCorsPreflightOptions: &awsapigateway.CorsOptions{
 			AllowOrigins: awsapigateway.Cors_ALL_ORIGINS(),
