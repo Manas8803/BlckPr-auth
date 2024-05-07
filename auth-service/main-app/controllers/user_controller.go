@@ -261,14 +261,16 @@ func ValidateOTP(r *gin.Context) {
 	jsonBody, err := json.Marshal(requestBody)
 	if err != nil {
 		fmt.Println("Error marshaling request body:", err)
+		network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+err.Error())
 		return
 	}
-	_, didErr := http.Post(os.Getenv("WALLET_URL"), "application/json", bytes.NewBuffer(jsonBody))
+	res, didErr := http.Post(os.Getenv("WALLET_URL"), "application/json", bytes.NewBuffer(jsonBody))
 	if didErr != nil {
 		log.Println(didErr)
 		network.RespondWithError(r, http.StatusInternalServerError, "Unable to generate Wallet")
 		return
 	}
+	log.Println(res.Body)
 
 	//* Generating Token
 	token, tokenErr := security.GenerateJWT()
