@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 
-	"github.com/Manas8803/authTest-cdk-deploy/deploy/roles"
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigateway"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
@@ -22,33 +21,18 @@ func LamdaStack(scope constructs.Construct, id string, props *AuthTestProps) aws
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
-	sendEmail_handler := awslambda.NewFunction(stack, jsii.String("email-service"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("../email-service"), nil),
-		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
-		Handler: jsii.String("main"),
-		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Environment: &map[string]*string{
-			"EMAIL":    jsii.String(os.Getenv("EMAIL")),
-			"PASSWORD": jsii.String(os.Getenv("PASSWORD")),
-		},
-	})
-
-	invoke_role := roles.CreateInvocationRole(stack, sendEmail_handler)
-
 	auth_handler := awslambda.NewFunction(stack, jsii.String("auth-service"), &awslambda.FunctionProps{
 		Code:    awslambda.Code_FromAsset(jsii.String("../auth-service"), nil),
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Role:    invoke_role,
 		Environment: &map[string]*string{
-			"SQLURI":            jsii.String(os.Getenv("SQLURI")),
-			"JWT_SECRET_KEY":    jsii.String(os.Getenv("JWT_SECRET_KEY")),
-			"JWT_LIFETIME":      jsii.String(os.Getenv("JWT_LIFETIME")),
-			"EMAIL":             jsii.String(os.Getenv("EMAIL")),
-			"PASSWORD":          jsii.String(os.Getenv("PASSWORD")),
-			"ADMIN":             jsii.String(os.Getenv("ADMIN")),
-			"SEND_TO_EMAIL_ARN": jsii.String(*sendEmail_handler.FunctionArn()),
+			"SQLURI":         jsii.String(os.Getenv("SQLURI")),
+			"JWT_SECRET_KEY": jsii.String(os.Getenv("JWT_SECRET_KEY")),
+			"JWT_LIFETIME":   jsii.String(os.Getenv("JWT_LIFETIME")),
+			"EMAIL":          jsii.String(os.Getenv("EMAIL")),
+			"PASSWORD":       jsii.String(os.Getenv("PASSWORD")),
+			"ADMIN":          jsii.String(os.Getenv("ADMIN")),
 		},
 	})
 

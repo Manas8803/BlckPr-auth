@@ -4,4 +4,3 @@ use ./auth-service
 
 use ./deploy-scripts
 
-use ./email-service
