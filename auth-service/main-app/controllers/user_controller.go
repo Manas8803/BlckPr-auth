@@ -8,14 +8,9 @@ import (
 	"auth-service/lib/utils"
 	model "auth-service/main-app/models"
 	"auth-service/main-app/responses"
-	"bytes"
 	"context"
-	"encoding/json"
-	"fmt"
-	"io"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -254,36 +249,6 @@ func ValidateOTP(r *gin.Context) {
 		network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+updateUserErr.Error())
 		return
 	}
-
-	//* Creating Wallet
-	requestBody := DIDRequestBody{
-		Email: user.Email,
-	}
-	jsonBody, err := json.Marshal(requestBody)
-	if err != nil {
-		fmt.Println("Error marshaling request body:", err)
-		network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+err.Error())
-		return
-	}
-	res, didErr := http.Post(os.Getenv("WALLET_URL"), "application/json", bytes.NewBuffer(jsonBody))
-	if didErr != nil {
-		log.Println(didErr)
-		network.RespondWithError(r, http.StatusInternalServerError, "Unable to generate Wallet")
-		return
-	}
-	var res_suc SuccessResponse
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		fmt.Println("Error reading response body:", err)
-		return
-	}
-	err = json.Unmarshal(body, &res_suc)
-	if err != nil {
-		log.Println("Error unmarshaling response body:", err)
-		return
-	}
-
-	log.Println(res_suc)
 
 	//* Generating Token
 	token, tokenErr := security.GenerateJWT()
