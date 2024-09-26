@@ -55,3 +55,9 @@ func NotifyAdmin(err error) error {
 	log.Fatal(sendEmailErr)
 	return sendEmailErr
 }
+
+func CloseDB() {
+	if err := CONN.Close(context.Background()); err != nil {
+		log.Fatalf("Error closing database connection: %v", err)
+	}
+}

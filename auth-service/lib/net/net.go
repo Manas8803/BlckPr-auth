@@ -1,15 +1,12 @@
 package network
 
 import (
-	"auth-service/main-app/models"
 	"auth-service/main-app/responses"
+	"bytes"
 	"encoding/json"
-	"log"
-	"os"
+	"fmt"
+	"net/http"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/lambda"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,37 +20,54 @@ func RespondWithError(ctx *gin.Context, statusCode int, message string) {
 	})
 }
 
+// EmailData represents the structure for the email content
+type EmailData struct {
+	Email   string    `json:"email"`
+	Message EmailBody `json:"message"`
+}
+
+// EmailBody represents the structure for the email body
+type EmailBody struct {
+	Subject string `json:"subject"`
+	Body    string `json:"body"`
+}
+
+// SendOTP sends an OTP to the specified email using a POST API call
 func SendOTP(email string, otp string) error {
-	sess, err := session.NewSession()
+	// Set the subject and body of the email
+	emailData := EmailData{
+		Email: email,
+		Message: EmailBody{
+			Subject: "OTP Verification",
+			Body:    fmt.Sprintf("<p>Your OTP for verification is: <strong>%s</strong></p>", otp), // Create a simple OTP email body
+		},
+	}
+
+	// Convert emailData to JSON
+	payloadBytes, err := json.Marshal(emailData)
 	if err != nil {
-		log.Println("Error in creating session : ", err.Error())
-		return err
+		return fmt.Errorf("failed to marshal email data: %v", err)
 	}
 
-	client := lambda.New(sess)
-	data, err := json.Marshal(models.OTP{Email: email, OTP: otp})
+	// Prepare the API request
+	req, err := http.NewRequest("POST", "https://q648rhgza1.execute-api.ap-south-1.amazonaws.com/prod/", bytes.NewBuffer(payloadBytes))
 	if err != nil {
-		log.Println("Error in marshalling data : ", err.Error())
+		return fmt.Errorf("failed to create new request: %v", err)
 	}
+	req.Header.Set("Content-Type", "application/json")
 
-	body := Payload_Body{Body: string(data)}
-
-	payload, err := json.Marshal(body)
+	// Send the request
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
-		log.Println("Error in marshalling payload : ", err.Error())
+		return fmt.Errorf("failed to send email: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check for response errors
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("email API responded with status: %v", resp.Status)
 	}
 
-	input := &lambda.InvokeInput{
-		FunctionName:   aws.String(os.Getenv("SEND_TO_EMAIL_ARN")),
-		Payload:        payload,
-		InvocationType: aws.String("Event"),
-	}
-
-	result, err := client.Invoke(input)
-	if err != nil {
-		log.Println("Error invoking Lambda function:", err)
-	} else {
-		log.Println("Lambda function invoked successfully:", result)
-	}
-	return err
+	return nil
 }

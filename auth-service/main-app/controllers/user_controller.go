@@ -118,10 +118,6 @@ func Register(r *gin.Context) {
 	r.Writer.Header().Set("Access-Control-Allow-Headers", "*")
 	r.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	var user model.User_Model
-	var queries *db.Queries
-	go func() {
-		queries = db.New(configs.CONN)
-	}()
 
 	//* Checking for invalid json format
 	if invalidJsonErr := r.BindJSON(&user); invalidJsonErr != nil {
@@ -138,18 +134,19 @@ func Register(r *gin.Context) {
 	//* Hashing Password
 	hashedPass, hashPassErr := security.HashPassword(user.Password)
 	if hashPassErr != nil {
-		network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+hashPassErr.Error())
+		network.RespondWithError(r, http.StatusInternalServerError, "Error Hashing Password : "+hashPassErr.Error())
 		return
 	}
 
 	//* Generating OTP
 	otp, genOtpErr := utils.GenerateOTP()
 	if genOtpErr != nil {
-		network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+genOtpErr.Error())
+		network.RespondWithError(r, http.StatusInternalServerError, "Error generating otp : "+genOtpErr.Error())
 		return
 	}
 
 	//* Creating User
+	queries := db.New(configs.CONN)
 	_, insertDBErr := queries.CreateUser(context.Background(), db.CreateUserParams{
 		Email:    user.Email,
 		Password: hashedPass,
@@ -175,11 +172,10 @@ func Register(r *gin.Context) {
 		network.RespondWithError(r, http.StatusInternalServerError, insertDBErr.Error()+"  : Error in inserting the document")
 		return
 	}
-	// Insert
 
 	//* Sending OTP
 	if sendEmailErr := network.SendOTP(user.Email, otp); sendEmailErr != nil {
-		network.RespondWithError(r, http.StatusInternalServerError, "Internal Server Error : "+sendEmailErr.Error())
+		network.RespondWithError(r, http.StatusInternalServerError, "Unable to send email: "+sendEmailErr.Error())
 		return
 	}
 
