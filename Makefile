@@ -11,3 +11,4 @@ deploy-swap:
 
 clean:
 	rm -rf ./auth-service/build
+
