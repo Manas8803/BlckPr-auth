@@ -180,6 +180,7 @@ func Register(r *gin.Context) {
 		network.RespondWithError(r, http.StatusInternalServerError, insertDBErr.Error()+"  : Error in inserting the document")
 		return
 	}
+	// Insert
 
 	//* Sending OTP
 	if sendEmailErr := network.SendOTP(user.Email, otp); sendEmailErr != nil {
