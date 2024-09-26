@@ -12,7 +12,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
@@ -44,8 +43,6 @@ type DIDRequestBody struct {
 func Login(r *gin.Context) {
 	r.Writer.Header().Set("Access-Control-Allow-Headers", "*")
 	r.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-	defer cancel()
 	var req model.Login
 
 	//* Checking for invalid json format
@@ -62,7 +59,7 @@ func Login(r *gin.Context) {
 
 	queries := db.New(configs.CONN)
 	//* Checking whether the user is registered
-	user, userErr := queries.GetUserByEmail(ctx, req.Email)
+	user, userErr := queries.GetUserByEmail(context.Background(), req.Email)
 	if userErr != nil {
 		if strings.Contains(userErr.Error(), "no rows in result set") {
 			network.RespondWithError(r, http.StatusNotFound, "Email is not registered.")
@@ -120,9 +117,7 @@ func Login(r *gin.Context) {
 func Register(r *gin.Context) {
 	r.Writer.Header().Set("Access-Control-Allow-Headers", "*")
 	r.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	var user model.User_Model
-	defer cancel()
 	var queries *db.Queries
 	go func() {
 		queries = db.New(configs.CONN)
@@ -155,7 +150,7 @@ func Register(r *gin.Context) {
 	}
 
 	//* Creating User
-	_, insertDBErr := queries.CreateUser(ctx, db.CreateUserParams{
+	_, insertDBErr := queries.CreateUser(context.Background(), db.CreateUserParams{
 		Email:    user.Email,
 		Password: hashedPass,
 		Otp:      otp,
