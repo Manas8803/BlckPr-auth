@@ -99,7 +99,7 @@ func Login(r *gin.Context) {
 		return
 	}
 
-	r.JSON(http.StatusOK, responses.UserResponse{Message: "success", Data: map[string]interface{}{"token": "Bearer " + token}})
+	r.JSON(http.StatusOK, responses.UserResponse{Message: "success", Data: map[string]interface{}{"token": "Bearer " + token, "user": user}})
 }
 
 // ^ Register :
@@ -257,7 +257,7 @@ func ValidateOTP(r *gin.Context) {
 		return
 	}
 
-	r.JSON(http.StatusOK, responses.UserResponse{Message: "success", Data: map[string]interface{}{"token": "Bearer " + token}})
+	r.JSON(http.StatusOK, responses.UserResponse{Message: "success", Data: map[string]interface{}{"token": "Bearer " + token, "user": user}})
 }
 
 type SuccessResponse struct {
