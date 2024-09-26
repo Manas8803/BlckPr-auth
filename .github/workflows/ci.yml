@@ -22,11 +22,6 @@ jobs:
         with:
           name: auth-service
           path: ./auth-service/bootstrap
-      - name: Upload Email Service Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: email-service
-          path: ./email-service/bootstrap
 
   deploy:
     needs: build
@@ -61,11 +56,7 @@ jobs:
         with:
           name: auth-service
           path: ./auth-service
-      - name: Download Email Service Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: email-service
-          path: ./email-service
+          
       - name: CDK Deploy
         working-directory: deploy-scripts
         run: cdk deploy
