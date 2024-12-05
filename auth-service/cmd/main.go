@@ -45,6 +45,7 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 
 func main() {
 	lambda.Start(Handler)
+	// Test Deploy
 	// err := godotenv.Load("./.env")
 	// if err != nil {
 	// 	log.Println("Error loading environment")
